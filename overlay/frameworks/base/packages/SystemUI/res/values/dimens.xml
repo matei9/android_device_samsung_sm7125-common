@@ -25,5 +25,6 @@
     default that should be overridden by device-specific overlays.  -->
     <dimen name="physical_power_button_center_screen_location_y">980px</dimen>
 
+    <dimen name="rounded_corner_content_padding">8dp</dimen>
 </resources>
 
