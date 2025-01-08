@@ -141,9 +141,7 @@ PRODUCT_PACKAGES += \
     android.hardware.renderscript@1.0-impl \
     libtinyxml \
     libtinyxml2 \
-    hwcomposer.atoll \
-    gralloc.atoll \
-    memtrack.atoll \
+    hwcomposer.qcom \
     libqdMetaData \
     libdisplayconfig.qti \
     vendor.qti.hardware.display.mapper@1.1.vendor \
