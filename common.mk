@@ -386,6 +386,11 @@ PRODUCT_PACKAGES += \
 
 PRODUCT_SOONG_NAMESPACES += vendor/qcom/opensource/usb/etc
 
+#Flash control
+PRODUCT_PACKAGES += \
+    vendor.samsung_ext.hardware.camera.flashlight-service \
+    FlashControl
+
 # Vibrator
 PRODUCT_PACKAGES += \
     android.hardware.vibrator-service.samsung
@@ -439,6 +444,7 @@ PRODUCT_SOONG_NAMESPACES += \
     $(LOCAL_PATH) \
     hardware/google/interfaces \
     hardware/google/pixel \
+    hardware/samsung-ext/interfaces \
     hardware/samsung
 
 # Inherit proprietary blobs
