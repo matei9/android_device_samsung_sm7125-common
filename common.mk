@@ -208,6 +208,9 @@ PRODUCT_PACKAGES += \
     android.hardware.gatekeeper@1.0-impl \
     android.hardware.gatekeeper@1.0-service
 
+# ION
+$(call soong_config_set_bool,libion,legacy_impl,true)
+
 # Health
 PRODUCT_PACKAGES += \
     android.hardware.health-service.samsung \
