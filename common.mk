@@ -14,6 +14,9 @@
 # limitations under the License.
 #
 
+# CP2A config
+BUILD_BROKEN_SRC_DIR_IS_WRITABLE := true
+
 # Add common definitions for Qualcomm
 $(call inherit-product, hardware/qcom-caf/common/common.mk)
 
