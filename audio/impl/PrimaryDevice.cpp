@@ -21,6 +21,7 @@
 
 #include <cutils/properties.h>
 #include <string.h>
+#include <unistd.h>
 
 #if MAJOR_VERSION >= 4
 #include <cmath>
@@ -216,6 +217,9 @@ Return<Result> PrimaryDevice::setMode(AudioMode mode) {
      * For the g_call_sim_slot parameter 0x01 describes SIM1 and 0x02 SIM2.
      */
 
+    constexpr int IMS_CALL_WAIT_POLL_MS = 100;
+    constexpr int IMS_CALL_WAIT_TIMEOUT_MS = 20000;
+
     char simSlot1[92], simSlot2[92];
 
     // These props return either 0 (not calling),
@@ -223,18 +227,22 @@ Return<Result> PrimaryDevice::setMode(AudioMode mode) {
     property_get("vendor.calls.slot_id0", simSlot1, "");
     property_get("vendor.calls.slot_id1", simSlot2, "");
 
-    // Wait until one sim slot reports a call.
-    // If neither slot is active this is a software IMS/VoLTE call (phh-ims
-    // never sets vendor.calls.slot_id*), so remap IN_CALL -> IN_COMMUNICATION
-    // to avoid spinning forever and crashing the HAL.
+    // A circuit-switched call sets vendor.calls.slot_id* once it connects; a
+    // software IMS/VoLTE call never does. Wait a bounded time for a modem call
+    // to appear so CS audio is routed through the modem (IN_CALL + g_call_sim_slot).
+    // If none appears, this is a software IMS call, so remap to IN_COMMUNICATION
+    // to keep the media path on the application processor.
     if (mode == AudioMode::IN_CALL) {
+        int waitMs = 0;
+        while (strcmp(simSlot1, "0") == 0 && strcmp(simSlot2, "0") == 0
+                && waitMs < IMS_CALL_WAIT_TIMEOUT_MS) {
+            usleep(IMS_CALL_WAIT_POLL_MS * 1000);
+            waitMs += IMS_CALL_WAIT_POLL_MS;
+            property_get("vendor.calls.slot_id0", simSlot1, "");
+            property_get("vendor.calls.slot_id1", simSlot2, "");
+        }
         if (strcmp(simSlot1, "0") == 0 && strcmp(simSlot2, "0") == 0) {
             mode = AudioMode::IN_COMMUNICATION;
-        } else {
-            while (strcmp(simSlot1, "0") == 0 && strcmp(simSlot2, "0") == 0) {
-                property_get("vendor.calls.slot_id0", simSlot1, "");
-                property_get("vendor.calls.slot_id1", simSlot2, "");
-            }
         }
     }
     if (strcmp(simSlot1, "1") == 0) {
