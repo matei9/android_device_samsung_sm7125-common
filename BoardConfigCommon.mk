@@ -55,6 +55,7 @@ TARGET_2ND_CPU_VARIANT := generic
 TARGET_2ND_CPU_VARIANT_RUNTIME := := cortex-a55
 
 # Kernel config
+KERNEL_CROSS_COMPILE := CROSS_COMPILE="aarch64-linux-gnu-"
 TARGET_KERNEL_CLANG_VERSION := r563880c
 TARGET_KERNEL_CLANG_PATH := $(abspath .)/prebuilts/clang/host/linux-x86/clang-$(TARGET_KERNEL_CLANG_VERSION)
 TARGET_KERNEL_SOURCE        := kernel/samsung/sm7125
