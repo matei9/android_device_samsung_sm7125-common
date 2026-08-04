@@ -1,0 +1,8 @@
+# EFS
+allow vendor_init tmpfs:dir rw_dir_perms;
+
+allow vendor_init cgroup:file getattr;
+
+allow vendor_init system_file:file { read getattr open };
+
+allow vendor_init block_device:lnk_file setattr;
